@@ -71,7 +71,7 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 	// User
 
 	public boolean loginUser(String email, String password) {
-		String jpql = "select u from User u where u.email=:uemail and u.Password=:upass";
+		String jpql = "select u from User u where u.email=:uemail and u.password=:upass";
 		Query query = em.createQuery(jpql);
 		query.setParameter("uemail", email);
 		query.setParameter("upass", password);
@@ -131,7 +131,7 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 		Query query = em.createQuery(jpql);
 		query.setParameter("uemail", email);
 
-		User user = (User) query.getResultList();
+		User user =  (User) query.getSingleResult();
 		return user;
 	}
 
@@ -194,6 +194,17 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 		Query query = em.createQuery(jpql);
 		query.setParameter("fsrc", src);
 		query.setParameter("fdes", des);
+
+		List<Flight> flights = query.getResultList();
+		return flights;
+	}
+	
+	public List<Flight> searchFlightMain(String src, String des, LocalDate dateT) {
+		String jpql = "select f from Flight f where f.fromCity=:fsrc and f.toCity=:fdes and f.dateT=:fdate";
+		Query query = em.createQuery(jpql);
+		query.setParameter("fsrc", src);
+		query.setParameter("fdes", des);
+		query.setParameter("fdate", dateT);
 
 		List<Flight> flights = query.getResultList();
 		return flights;

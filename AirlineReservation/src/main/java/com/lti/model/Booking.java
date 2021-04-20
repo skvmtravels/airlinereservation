@@ -14,6 +14,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="tbl_booking1")
 public class Booking {
@@ -61,6 +63,7 @@ public class Booking {
 		this.noOfPassengers = noOfPassengers;
 	}
 
+	@JsonIgnore
 	public User getUser() {
 		return user;
 	}
@@ -69,6 +72,7 @@ public class Booking {
 		this.user = user;
 	}
 
+	@JsonIgnore
 	public Flight getFlight() {
 		return flight;
 	}

@@ -33,6 +33,7 @@ public interface AirlineRepository {
 	public List<Flight> findFlightsByDeptTime(LocalTime localTime);
 	public List<Flight> findFlightsByArrivalTime(LocalTime localTime);
 	public List<Flight> findFlightsBySourceandDestination(String src,String des);
+	public List<Flight> searchFlightMain(String src, String des, LocalDate dateT);
 	public List<Flight> findFlightsByDepTimeandArrTime(Time dep,Time arr);
 	public String findSeatByTicketId(int ticket_id);
 	public boolean findStatusByTicketId(int ticket_id);

@@ -8,6 +8,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.lti.dto.BookingDto;
+import com.lti.dto.TicketDto;
 import com.lti.model.Booking;
 import com.lti.model.Flight;
 import com.lti.model.Ticket;
@@ -19,6 +21,9 @@ public class AirlineServiceImpl implements AirlineService {
 	
 	@Autowired
 	AirlineRepository airlineDao;
+	
+	@Autowired
+	EmailService emailService;
 
 	public Flight addFlights(Flight flight) {
 		
@@ -51,7 +56,10 @@ public class AirlineServiceImpl implements AirlineService {
 	}
 
 	public User addUser(User user) {
-		
+		String subject="Registration confirmation";
+		String text="Hi "+user.getFirstName()+"! You have successfully registered. We promise to give you our best no matter what.";
+		String fileToattach="D:\\Game Manan\\Idle_002.png";
+		emailService.sendEmailWithPicForNewRegistration(user.getEmail(),text,subject,fileToattach);
 		return airlineDao.addUser(user);
 	}
 
@@ -124,6 +132,10 @@ public class AirlineServiceImpl implements AirlineService {
 		
 		return airlineDao.findFlightsBySourceandDestination(src, des);
 	}
+	
+	public List<Flight> searchFlightMain(String src, String des, LocalDate dateT){
+		return airlineDao.searchFlightMain(src, des, dateT);
+	}
 
 	public List<Flight> findFlightsByDepTimeandArrTime(Time dep, Time arr) {
 		
@@ -170,14 +182,37 @@ public class AirlineServiceImpl implements AirlineService {
 		return airlineDao.viewAllBookings();
 	}
 
-	public Ticket bookTicket(Ticket ticket) {
+	public Ticket bookTicket(TicketDto ticketDto) {
+		int flightNo=ticketDto.getFlight_no();
+		Flight flight=airlineDao.findFlightsById(flightNo);
+		int bookingId=ticketDto.getBooking_id();
+		Booking booking=airlineDao.findBookingById(bookingId);
 		
-		return airlineDao.bookTicket(ticket);
+		Ticket ticket=new Ticket();
+		ticket.setBooking(booking);
+		ticket.setFlight(flight);
+		ticket.setSeatNo(ticketDto.getSeatNo());
+		ticket.setTravelDate(ticketDto.getTravelDate());
+		ticket.setBookingStatus(ticketDto.isBookingStatus());
+		Ticket ticketSaved=airlineDao.bookTicket(ticket);
+		return airlineDao.bookTicket(ticketSaved);
 	}
 
-	public Booking userDoesBooking(Booking booking) {
+	public Booking userDoesBooking(BookingDto bookingDto) {
+		int flightNo=bookingDto.getFlight_no();
+		int userId=bookingDto.getUser_id();
+		Flight flight=airlineDao.findFlightsById(flightNo);
+		User user=airlineDao.findUserById(userId);
 		
-		return airlineDao.userDoesBooking(booking);
+		Booking booking=new Booking();
+		booking.setBookDate(bookingDto.getBookDate());
+		booking.setNoOfPassengers(bookingDto.getNoOfPassengers());
+		booking.setFlight(flight);
+		booking.setUser(user);
+		Booking bookingDone=airlineDao.userDoesBooking(booking);
+		
+		return bookingDone;
 	}
+	
 
 }

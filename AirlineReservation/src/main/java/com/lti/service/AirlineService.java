@@ -5,6 +5,8 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import com.lti.dto.BookingDto;
+import com.lti.dto.TicketDto;
 import com.lti.model.Booking;
 import com.lti.model.Flight;
 import com.lti.model.Ticket;
@@ -33,6 +35,7 @@ public interface AirlineService {
 	public List<Flight> findFlightsByDeptTime(LocalTime localTime);
 	public List<Flight> findFlightsByArrivalTime(LocalTime localTime);
 	public List<Flight> findFlightsBySourceandDestination(String src,String des);
+	public List<Flight> searchFlightMain(String src, String des, LocalDate dateT);
 	public List<Flight> findFlightsByDepTimeandArrTime(Time dep,Time arr);
 	public String findSeatByTicketId(int ticket_id);
 	public boolean findStatusByTicketId(int ticket_id);
@@ -42,6 +45,6 @@ public interface AirlineService {
 	public List<Ticket> viewAllTicketsByFlightNumber(int fid);
 	public Booking findBookingById(int bookId);
 	public List<Booking> viewAllBookings();
-	public Ticket bookTicket(Ticket ticket);
-	public Booking userDoesBooking(Booking booking);
+	public Ticket bookTicket(TicketDto ticketDto);
+	public Booking userDoesBooking(BookingDto bookingDto);
 }

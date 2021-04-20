@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="tbl_ticket1")
 public class Ticket {
@@ -65,6 +67,7 @@ public class Ticket {
 		this.bookingStatus = bookingStatus;
 	}
 
+	@JsonIgnore
 	public Flight getFlight() {
 		return flight;
 	}
@@ -73,6 +76,7 @@ public class Ticket {
 		this.flight = flight;
 	}
 
+	@JsonIgnore
 	public Booking getBooking() {
 		return booking;
 	}

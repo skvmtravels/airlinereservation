@@ -1,5 +1,6 @@
 package com.lti.model;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class Flight {
 	String toCity;
 	LocalTime depTime;
 	LocalTime arrTime;
+	LocalDate dateT;
 	double ticketPrice;
 	int capacity;
 	
@@ -82,6 +84,7 @@ public class Flight {
 	public void setArrTime(LocalTime arrTime) {
 		this.arrTime = arrTime;
 	}
+	
 
 	public double getTicketPrice() {
 		return ticketPrice;
@@ -114,6 +117,16 @@ public class Flight {
 	public void setBookings(List<Booking> bookings) {
 		this.bookings = bookings;
 	}
+
+	public LocalDate getDateT() {
+		return dateT;
+	}
+
+	public void setDateT(LocalDate dateT) {
+		this.dateT = dateT;
+	}
+	
+	
 	
 	
 	
