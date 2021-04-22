@@ -3,6 +3,7 @@ package com.lti.repository;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -15,7 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.lti.model.Admin;
 import com.lti.model.Booking;
+import com.lti.model.ContactUs;
+import com.lti.model.Feedback;
 import com.lti.model.Flight;
+import com.lti.model.Passenger;
 import com.lti.model.Ticket;
 import com.lti.model.User;
 
@@ -199,16 +203,16 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 		return flights;
 	}
 	
-	public List<Flight> searchFlightMain(String src, String des, LocalDate dateT) {
-		String jpql = "select f from Flight f where f.fromCity=:fsrc and f.toCity=:fdes and f.dateT=:fdate";
-		Query query = em.createQuery(jpql);
-		query.setParameter("fsrc", src);
-		query.setParameter("fdes", des);
-		query.setParameter("fdate", dateT);
-
-		List<Flight> flights = query.getResultList();
-		return flights;
-	}
+//	public List<Flight> searchFlightMain(String src, String des, LocalDate dateT) {
+//		String jpql = "select f from Flight f where f.fromCity=:fsrc and f.toCity=:fdes and f.dateT=:fdate";
+//		Query query = em.createQuery(jpql);
+//		query.setParameter("fsrc", src);
+//		query.setParameter("fdes", des);
+//		query.setParameter("fdate", dateT);
+//
+//		List<Flight> flights = query.getResultList();
+//		return flights;
+//	}
 
 	public List<Flight> findFlightsByDepTimeandArrTime(Time dep, Time arr) {
 		String jpql = "select f from Flight f where f.depTime=:fdep and f.arrTime=:farr";
@@ -252,6 +256,20 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 		List<Ticket> tickets = query.getResultList();
 		return tickets;
 	}
+	
+	public Passenger findPassengerByTicketId(int ticket_id) {
+		Ticket ticket = em.find(Ticket.class, ticket_id);
+		return ticket.getPassenger();
+	}
+	
+	public List<Passenger> findPassengerByBookingId(int booking_id) {
+		List<Passenger> passengers=new ArrayList<Passenger>();
+		Booking booking=findBookingById(booking_id);
+		for(Ticket tic : booking.getTickets()) {
+			passengers.add(tic.getPassenger());
+		}
+		return passengers;
+	}
 
 	public List<Ticket> viewAllTickets() {
 		String jpql = "select t from Ticket t";
@@ -267,9 +285,21 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 		List<Ticket> tickets = query.getResultList();
 		return tickets;
 	}
+	
+	public List<Ticket> viewAllTicketsByFlightNumberS(int fid) {
+		String jpql = "select t.seatNo,t.travelDate from Ticket t where t.flight.flight_no=:fid";
+		Query query = em.createQuery(jpql);
+		query.setParameter("fid", fid);
+		List<Ticket> tickets = query.getResultList();
+		return tickets;
+	}
 
 	public Booking findBookingById(int bookId) {
 		return em.find(Booking.class, bookId);
+	}
+	
+	public Passenger findPassengerById(int passenger_id) {
+		return em.find(Passenger.class, passenger_id);
 	}
 
 	public List<Booking> viewAllBookings() {
@@ -289,6 +319,34 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 	public Booking userDoesBooking(Booking booking) {
 		Booking booking1 = em.merge(booking);
 		return booking1;
+	}
+
+	@Transactional
+	public Passenger addPassenger(Passenger passenger) {
+		Passenger passengerPersist = em.merge(passenger);
+		return passengerPersist;
+	}
+	
+	@Transactional
+	public Feedback getFeedback(Feedback feedback) {
+		Feedback feedback1 = em.merge(feedback);
+		em.close();
+		return feedback1;
+	}
+
+	
+	@Transactional
+	public ContactUs getcontactUs(ContactUs contactus) {
+		ContactUs contactus1 = em.merge(contactus);
+		em.close();
+		return contactus1;
+	}
+	
+
+	@Override
+	public List<Ticket> findSeatsByFlight(int flight_no) {
+		
+		return null;
 	}
 
 }

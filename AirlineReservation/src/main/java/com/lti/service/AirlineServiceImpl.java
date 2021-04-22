@@ -11,7 +11,10 @@ import org.springframework.stereotype.Service;
 import com.lti.dto.BookingDto;
 import com.lti.dto.TicketDto;
 import com.lti.model.Booking;
+import com.lti.model.ContactUs;
+import com.lti.model.Feedback;
 import com.lti.model.Flight;
+import com.lti.model.Passenger;
 import com.lti.model.Ticket;
 import com.lti.model.User;
 import com.lti.repository.AirlineRepository;
@@ -133,9 +136,9 @@ public class AirlineServiceImpl implements AirlineService {
 		return airlineDao.findFlightsBySourceandDestination(src, des);
 	}
 	
-	public List<Flight> searchFlightMain(String src, String des, LocalDate dateT){
-		return airlineDao.searchFlightMain(src, des, dateT);
-	}
+//	public List<Flight> searchFlightMain(String src, String des, LocalDate dateT){
+//		return airlineDao.searchFlightMain(src, des, dateT);
+//	}
 
 	public List<Flight> findFlightsByDepTimeandArrTime(Time dep, Time arr) {
 		
@@ -187,10 +190,13 @@ public class AirlineServiceImpl implements AirlineService {
 		Flight flight=airlineDao.findFlightsById(flightNo);
 		int bookingId=ticketDto.getBooking_id();
 		Booking booking=airlineDao.findBookingById(bookingId);
+		int passengerId=ticketDto.getPassenger_id();
+		Passenger passenger=airlineDao.findPassengerById(passengerId);
 		
 		Ticket ticket=new Ticket();
 		ticket.setBooking(booking);
 		ticket.setFlight(flight);
+		ticket.setPassenger(passenger);
 		ticket.setSeatNo(ticketDto.getSeatNo());
 		ticket.setTravelDate(ticketDto.getTravelDate());
 		ticket.setBookingStatus(ticketDto.isBookingStatus());
@@ -212,6 +218,38 @@ public class AirlineServiceImpl implements AirlineService {
 		Booking bookingDone=airlineDao.userDoesBooking(booking);
 		
 		return bookingDone;
+	}
+
+	
+	public Passenger addPassenger(Passenger passenger) {
+		
+		return airlineDao.addPassenger(passenger);
+	}
+	
+	public Passenger findPassengerByTicketId(int ticket_id) {
+		return airlineDao.findPassengerByTicketId(ticket_id);
+	}
+	
+	public List<Passenger> findPassengerByBookingId(int booking_id){
+		return airlineDao.findPassengerByBookingId(booking_id);
+	}
+
+	@Override
+	public Feedback getFeedback(Feedback feedback) {
+		return airlineDao.getFeedback(feedback);
+	}
+
+	@Override
+	public ContactUs getcontactUs(ContactUs contactus) {
+		// TODO Auto-generated method stub
+		return airlineDao.getcontactUs(contactus);
+	}
+	
+
+	@Override
+	public List<Ticket> viewAllTicketsByFlightNumberS(int fid) {
+		// TODO Auto-generated method stub
+		return airlineDao.viewAllTicketsByFlightNumberS(fid);
 	}
 	
 

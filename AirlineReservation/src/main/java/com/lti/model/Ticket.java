@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -34,6 +35,10 @@ public class Ticket {
 	@ManyToOne
 	@JoinColumn(name="booking_id")
 	Booking booking;
+	
+	@OneToOne
+	@JoinColumn(name = "passenger_id")
+	Passenger passenger;
 
 	public int getTicket_id() {
 		return ticket_id;
@@ -83,6 +88,15 @@ public class Ticket {
 
 	public void setBooking(Booking booking) {
 		this.booking = booking;
+	}
+
+	@JsonIgnore
+	public Passenger getPassenger() {
+		return passenger;
+	}
+
+	public void setPassenger(Passenger passenger) {
+		this.passenger = passenger;
 	}
 	
 	

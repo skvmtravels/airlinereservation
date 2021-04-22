@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lti.dto.AdminDto;
 import com.lti.dto.BookingDto;
 import com.lti.dto.LoginDto;
 import com.lti.dto.SearchFlightDto;
 import com.lti.dto.TicketDto;
 import com.lti.model.Booking;
+import com.lti.model.ContactUs;
+import com.lti.model.Feedback;
 import com.lti.model.Flight;
+import com.lti.model.Passenger;
 import com.lti.model.Ticket;
 import com.lti.model.User;
 import com.lti.service.AirlineService;
@@ -43,9 +47,9 @@ public class AirlineController {
 	}
 	
 	@PostMapping(value = "/loginadmin")
-	public boolean loginAdmin(@RequestBody LoginDto loginDto) {
+	public boolean loginAdmin(@RequestBody AdminDto adminDto) {
 		
-		return airlineService.loginAdmin(loginDto.getEmail(),loginDto.getPassword());
+		return airlineService.loginAdmin(adminDto.getaUserName(),adminDto.getaPassword());
 	}
 	
 	@PutMapping(value="/updateuser")
@@ -122,11 +126,35 @@ public class AirlineController {
 		airlineService.deleteFlights(flight_no);
 	}
 	
-	@PostMapping(value = "/searchflights")
-	public List<Flight> searchFlightMain(@RequestBody SearchFlightDto searchFlightDto){
-		List<Flight> flights=airlineService.searchFlightMain(searchFlightDto.getFromCity(), searchFlightDto.getToCity(),searchFlightDto.getDateT());
-		return flights;
+	@GetMapping(value = "/searchforbooking/{flight_no}")
+	public Flight findFlightById(@PathVariable("flight_no") int flight_no) {
+		Flight findflight=airlineService.findFlightsById(flight_no);
+		return findflight;
 	}
+	
+	@GetMapping(value = "/searchticketforbooking/{booking_id}")
+	public List<Ticket> findTicketsByBookingId(@PathVariable("booking_id") int booking_id){
+		List<Ticket> findTickets=airlineService.findTicketsByBookingId(booking_id);
+		return findTickets;
+	}
+	
+	@GetMapping(value = "/searchpassforbooking/{ticket_id}")
+	public Passenger findPassByTicketId(@PathVariable("ticket_id") int ticket_id) {
+		Passenger pass=airlineService.findPassengerByTicketId(ticket_id);
+		return pass;
+	}
+	
+	@GetMapping(value = "/searchpassforbookings/{booking_id}")
+	public List<Passenger> findPassByBookingId(@PathVariable("booking_id") int booking_id) {
+		List<Passenger> pass=airlineService.findPassengerByBookingId(booking_id);
+		return pass;
+	}
+	
+//	@PostMapping(value = "/searchflights")
+//	public List<Flight> searchFlightMain(@RequestBody SearchFlightDto searchFlightDto){
+//		List<Flight> flights=airlineService.searchFlightMain(searchFlightDto.getFromCity(), searchFlightDto.getToCity(),searchFlightDto.getDateT());
+//		return flights;
+//	}
 	
 	
 //	booking
@@ -152,6 +180,38 @@ public class AirlineController {
 	public List<Flight> searchFlight(@PathVariable("fromCity") String fromCity, @PathVariable("toCity") String toCity){
 		List<Flight> flights=airlineService.findFlightsBySourceandDestination(fromCity, toCity);
 		return flights;
+	}
+	
+	@PostMapping(value = "/addpassenger")
+	public Passenger addPassenger(@RequestBody Passenger passenger) {
+		Passenger passPersist=airlineService.addPassenger(passenger);
+		return passPersist;
+	}
+	
+
+	@PostMapping(value="/getFeedback")
+	public Feedback getFeedback(@RequestBody Feedback feedback) {
+		Feedback persistFeedback = airlineService.getFeedback(feedback);
+		return persistFeedback;
+	}
+	
+	@PostMapping(value="/getContactUs")
+	public ContactUs getContactUs(@RequestBody ContactUs contactus) {
+		ContactUs persistContactus = airlineService.getcontactUs(contactus);
+		return persistContactus;
+	}
+	
+	
+	@GetMapping(value = "/findSeat/{flight_no}")
+	public List<Ticket> findSeats(@RequestBody @PathVariable("flight_no") int flight_no){
+		List<Ticket> allseats=airlineService.viewAllTicketsByFlightNumber(flight_no);
+		return allseats;
+	}
+	
+	@GetMapping(value = "/findSeats/{flight_no}")
+	public List<Ticket> findSeatsString(@RequestBody @PathVariable("flight_no") int flight_no){
+		List<Ticket> allseats=airlineService.viewAllTicketsByFlightNumberS(flight_no);
+		return allseats;
 	}
 	
 	

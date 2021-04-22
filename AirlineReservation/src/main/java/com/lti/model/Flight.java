@@ -1,6 +1,5 @@
 package com.lti.model;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class Flight {
 	String toCity;
 	LocalTime depTime;
 	LocalTime arrTime;
-	LocalDate dateT;
+	//LocalDate dateT;
 	double ticketPrice;
 	int capacity;
 	
@@ -36,6 +35,7 @@ public class Flight {
 	
 	@OneToMany(mappedBy="flight",cascade=CascadeType.ALL)
 	List<Booking> bookings;
+	
 
 	public int getFlight_no() {
 		return flight_no;
@@ -118,13 +118,10 @@ public class Flight {
 		this.bookings = bookings;
 	}
 
-	public LocalDate getDateT() {
-		return dateT;
-	}
+	
 
-	public void setDateT(LocalDate dateT) {
-		this.dateT = dateT;
-	}
+
+	
 	
 	
 	

@@ -1,9 +1,11 @@
 package com.lti.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -20,6 +22,10 @@ public class Passenger {
 	int age;
 	String gender;
 	String adultOrChild;
+	
+	@OneToOne(mappedBy = "passenger",cascade = CascadeType.ALL)
+	Ticket ticket;
+	
 	public int getPassenger_id() {
 		return passenger_id;
 	}
@@ -55,6 +61,12 @@ public class Passenger {
 	}
 	public void setAdultOrChild(String adultOrChild) {
 		this.adultOrChild = adultOrChild;
+	}
+	public Ticket getTicket() {
+		return ticket;
+	}
+	public void setTicket(Ticket ticket) {
+		this.ticket = ticket;
 	}
 	
 	

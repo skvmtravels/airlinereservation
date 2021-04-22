@@ -8,6 +8,7 @@ public class TicketDto {
 	boolean bookingStatus;
 	int flight_no;
 	int booking_id;
+	int passenger_id;
 	public LocalDate getTravelDate() {
 		return travelDate;
 	}
@@ -38,5 +39,12 @@ public class TicketDto {
 	public void setBooking_id(int booking_id) {
 		this.booking_id = booking_id;
 	}
+	public int getPassenger_id() {
+		return passenger_id;
+	}
+	public void setPassenger_id(int passenger_id) {
+		this.passenger_id = passenger_id;
+	}
+	
 	
 }
