@@ -8,7 +8,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="tbl_admin")
+@Table(name="tbl_admin1")
 public class Admin {
 
 	@Id

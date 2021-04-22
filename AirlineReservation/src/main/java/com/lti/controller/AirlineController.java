@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lti.dto.AdminDto;
@@ -17,6 +18,7 @@ import com.lti.dto.BookingDto;
 import com.lti.dto.LoginDto;
 import com.lti.dto.SearchFlightDto;
 import com.lti.dto.TicketDto;
+import com.lti.dto.WalletDto;
 import com.lti.model.Booking;
 import com.lti.model.ContactUs;
 import com.lti.model.Feedback;
@@ -150,6 +152,48 @@ public class AirlineController {
 		return pass;
 	}
 	
+	@GetMapping(value = "/bookandtick/{user_id}")
+	public List<Booking> bookAndTick(@PathVariable("user_id") int user_id){
+		List<Booking> bt=airlineService.viewBookingByUserAndTicketTrue(user_id);
+		
+		return bt;
+	}
+	
+	@GetMapping(value = "/bookandtickfalse/{user_id}")
+	public List<Booking> bookAndTickfalse(@PathVariable("user_id") int user_id){
+		List<Booking> bt=airlineService.viewBookingByUserAndTicketFalse(user_id);
+		
+		return bt;
+	}
+	
+	@PutMapping(value = "/changebookstatus/{booking_id}")
+	public String changeBookStatus(@PathVariable("booking_id") int booking_id) {
+		return airlineService.changeBookingStatus(booking_id);
+	}
+	
+	@PostMapping(value = "/bookandstatus")
+	public List<Booking> bookAndTick(){
+		List<Booking> bt=airlineService.viewBookingByStatus();
+		
+		return bt;
+	}
+	
+	@GetMapping(value = "/flightbybooking/{booking_id}")
+	public Flight findFlightByBookId(@PathVariable("booking_id") int booking_id) {
+		Flight fb=airlineService.findFlightByBookingID(booking_id);
+		return fb;
+	}
+	
+	@GetMapping(value = "/viewallticks")
+	public List<Ticket> viewAllTickets(){
+		return airlineService.viewAllTickets();
+	}
+	
+	@GetMapping(value = "/deleteoldtickets")
+	public String deleteOldTickets() {
+		return airlineService.oldBookingStatus();
+	}
+	
 //	@PostMapping(value = "/searchflights")
 //	public List<Flight> searchFlightMain(@RequestBody SearchFlightDto searchFlightDto){
 //		List<Flight> flights=airlineService.searchFlightMain(searchFlightDto.getFromCity(), searchFlightDto.getToCity(),searchFlightDto.getDateT());
@@ -212,6 +256,13 @@ public class AirlineController {
 	public List<Ticket> findSeatsString(@RequestBody @PathVariable("flight_no") int flight_no){
 		List<Ticket> allseats=airlineService.viewAllTicketsByFlightNumberS(flight_no);
 		return allseats;
+	}
+	
+	@PostMapping(value="/rechargewallet")
+	public double rechargeUserWallet(@RequestBody WalletDto walletDto) {
+		double walletPersisted = airlineService.rechargeUserWallet(walletDto.getUser_id(),walletDto.getWallet());
+
+		return walletPersisted;
 	}
 	
 	

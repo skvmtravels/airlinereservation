@@ -56,4 +56,11 @@ public interface AirlineRepository {
 	public Passenger findPassengerById(int passenger_id);
 	public List<Ticket> findSeatsByFlight(int flight_no);
 	public List<Ticket> viewAllTicketsByFlightNumberS(int fid);
+	public List<Booking> viewBookingByUserAndTicketTrue(int user_id);
+	public List<Booking> viewBookingByUserAndTicketFalse(int user_id);
+	public List<Booking> viewBookingByStatus();
+	public double rechargeUserWallet(int userId, double wallet) ;
+	public String changeBookingStatus(int booking_id);
+	public Flight findFlightByBookingID(int booking_id);
+	public String oldBookingStatus();
 }

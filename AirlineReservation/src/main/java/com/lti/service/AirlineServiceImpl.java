@@ -252,5 +252,31 @@ public class AirlineServiceImpl implements AirlineService {
 		return airlineDao.viewAllTicketsByFlightNumberS(fid);
 	}
 	
+	public List<Booking> viewBookingByUserAndTicketTrue(int user_id){
+		return airlineDao.viewBookingByUserAndTicketTrue(user_id);
+	}
+	public List<Booking> viewBookingByUserAndTicketFalse(int user_id){
+		return airlineDao.viewBookingByUserAndTicketFalse(user_id);
+	}
+	public List<Booking> viewBookingByStatus(){
+		return airlineDao.viewBookingByStatus();
+	}
+	
+	public double rechargeUserWallet(int userId, double wallet) {
+		return airlineDao.rechargeUserWallet(userId, wallet);
+	}
+	
+	public String changeBookingStatus(int booking_id) {
+		return airlineDao.changeBookingStatus(booking_id);
+	}
+	
+	public Flight findFlightByBookingID(int booking_id) {
+		return airlineDao.findFlightByBookingID(booking_id);
+	}
+	
+	public String oldBookingStatus() {
+		return airlineDao.oldBookingStatus();
+	}
+	
 
 }

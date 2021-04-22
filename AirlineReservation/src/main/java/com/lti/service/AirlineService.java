@@ -56,4 +56,11 @@ public interface AirlineService {
 	public List<Ticket> viewAllTicketsByFlightNumberS(int fid);
 	public Passenger findPassengerByTicketId(int ticket_id);
 	public List<Passenger> findPassengerByBookingId(int booking_id);
+	public List<Booking> viewBookingByUserAndTicketTrue(int user_id);
+	public List<Booking> viewBookingByUserAndTicketFalse(int user_id);
+	public List<Booking> viewBookingByStatus();
+	public double rechargeUserWallet(int userId, double wallet) ;
+	public String changeBookingStatus(int booking_id);
+	public Flight findFlightByBookingID(int booking_id);
+	public String oldBookingStatus();
 }

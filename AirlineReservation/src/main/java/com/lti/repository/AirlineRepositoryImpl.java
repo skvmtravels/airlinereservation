@@ -153,6 +153,10 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 	}
 
 	// flights
+	public Flight findFlightByBookingID(int booking_id) {
+		Booking booking = em.find(Booking.class, booking_id);
+		return booking.getFlight();
+	}
 
 	public Flight findFlightsById(int flight_no) {
 		return em.find(Flight.class, flight_no);
@@ -244,6 +248,54 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 		String jpql = "select t from Ticket t where t.travelDate=:td";
 		Query query = em.createQuery(jpql);
 		query.setParameter("td", travelDate);
+		return query.getResultList();
+
+	}
+	
+	public List<Booking> viewBookingByUserAndTicketTrue(int user_id){
+		String jpql = "select distinct b from Booking b join b.tickets t where t.bookingStatus=1 and b.user.user_id=:uid";
+		Query query = em.createQuery(jpql);
+		query.setParameter("uid", user_id);
+		return query.getResultList();
+
+	}
+	
+	public List<Booking> viewBookingByUserAndTicketFalse(int user_id){
+		String jpql = "select distinct b from Booking b join b.tickets t where t.bookingStatus=0 and b.user.user_id=:uid";
+		Query query = em.createQuery(jpql);
+		query.setParameter("uid", user_id);
+		return query.getResultList();
+
+	}
+	
+	@Transactional
+	public String changeBookingStatus(int booking_id){
+		String jpql="update Ticket t set t.bookingStatus=0 where t.booking.booking_id=:bid";
+		Query query=em.createQuery(jpql);
+		query.setParameter("bid", booking_id);
+		
+		int updatedRows=query.executeUpdate();
+		if(updatedRows>0){
+			return "0";
+		}
+		return "update failed";
+	}
+	
+	@Transactional
+	public String oldBookingStatus(){
+		String jpql="update Ticket t set t.bookingStatus=0 where trunc(sysdate)>t.travelDate";
+		Query query=em.createQuery(jpql);
+		
+		int updatedRows=query.executeUpdate();
+		if(updatedRows>0){
+			return "yo";
+		}
+		return "update failed";
+	}
+	
+	public List<Booking> viewBookingByStatus(){
+		String jpql = "select distinct b from Booking b join b.tickets t where t.bookingStatus=1";
+		Query query = em.createQuery(jpql);
 		return query.getResultList();
 
 	}
@@ -347,6 +399,13 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 	public List<Ticket> findSeatsByFlight(int flight_no) {
 		
 		return null;
+	}
+	
+	@Transactional
+	public double rechargeUserWallet(int userId, double wallet) {
+		User user=em.find(User.class, userId);
+		user.setWallet(user.getWallet()+wallet);
+		return user.getWallet();
 	}
 
 }
