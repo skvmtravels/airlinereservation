@@ -268,6 +268,27 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 
 	}
 	
+	public List<Booking> viewAllBookingsAdmin(){
+		String jpql = "select distinct b from Booking b join b.tickets t";
+		Query query = em.createQuery(jpql);
+		return query.getResultList();
+
+	}
+	
+	public List<Booking> viewAllBookingsAdminTrue(){
+		String jpql = "select distinct b from Booking b join b.tickets t where t.bookingStatus=1";
+		Query query = em.createQuery(jpql);
+		return query.getResultList();
+
+	}
+	
+	public List<Booking> viewAllBookingsAdminFalse(){
+		String jpql = "select distinct b from Booking b join b.tickets t where t.bookingStatus=0";
+		Query query = em.createQuery(jpql);
+		return query.getResultList();
+
+	}
+	
 	@Transactional
 	public String changeBookingStatus(int booking_id){
 		String jpql="update Ticket t set t.bookingStatus=0 where t.booking.booking_id=:bid";
@@ -405,6 +426,13 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 	public double rechargeUserWallet(int userId, double wallet) {
 		User user=em.find(User.class, userId);
 		user.setWallet(user.getWallet()+wallet);
+		return user.getWallet();
+	}
+	
+	@Transactional
+	public double payUserWallet(int userId, double wallet) {
+		User user=em.find(User.class, userId);
+		user.setWallet(user.getWallet()-wallet);
 		return user.getWallet();
 	}
 

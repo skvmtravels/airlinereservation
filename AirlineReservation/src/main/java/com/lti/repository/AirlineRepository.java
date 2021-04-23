@@ -63,4 +63,8 @@ public interface AirlineRepository {
 	public String changeBookingStatus(int booking_id);
 	public Flight findFlightByBookingID(int booking_id);
 	public String oldBookingStatus();
+	public double payUserWallet(int userId, double wallet);
+	public List<Booking> viewAllBookingsAdmin();
+	public List<Booking> viewAllBookingsAdminTrue();
+	public List<Booking> viewAllBookingsAdminFalse();
 }

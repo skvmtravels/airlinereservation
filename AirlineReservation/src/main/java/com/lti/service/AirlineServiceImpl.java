@@ -61,7 +61,7 @@ public class AirlineServiceImpl implements AirlineService {
 	public User addUser(User user) {
 		String subject="Registration confirmation";
 		String text="Hi "+user.getFirstName()+"! You have successfully registered. We promise to give you our best no matter what.";
-		String fileToattach="D:\\Game Manan\\Idle_002.png";
+		String fileToattach="D:\\Airline Project\\ang\\mailsender.jpeg";
 		emailService.sendEmailWithPicForNewRegistration(user.getEmail(),text,subject,fileToattach);
 		return airlineDao.addUser(user);
 	}
@@ -278,5 +278,22 @@ public class AirlineServiceImpl implements AirlineService {
 		return airlineDao.oldBookingStatus();
 	}
 	
+	public double payUserWallet(int userId, double wallet) {
+		return airlineDao.payUserWallet(userId, wallet);
+				
+	}
+	
+	public List<Booking> viewAllBookingsAdmin(){
+		return airlineDao.viewAllBookingsAdmin();
+	}
+	
+	public List<Booking> viewAllBookingsAdminTrue(){
+		return airlineDao.viewAllBookingsAdminTrue();
+	}
+	
+	public List<Booking> viewAllBookingsAdminFalse()
+	{
+		return airlineDao.viewAllBookingsAdminFalse();
+	}
 
 }

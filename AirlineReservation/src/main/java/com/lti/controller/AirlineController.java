@@ -265,6 +265,30 @@ public class AirlineController {
 		return walletPersisted;
 	}
 	
+	@PostMapping(value="/paywallet")
+	public double payUserWallet(@RequestBody WalletDto walletDto) {
+		double walletPersisted = airlineService.payUserWallet(walletDto.getUser_id(),walletDto.getWallet());
+
+		return walletPersisted;
+	}
+	
+	@GetMapping(value = "/findbybookid/{booking_id}")
+	public Booking findBookingById(@PathVariable("booking_id") int booking_id) {
+		Booking booking=airlineService.findBookingById(booking_id);
+		return booking;
+	}
+	
+	@GetMapping(value = "/viewadminbookingtrue")
+	public List<Booking> viewAllBookingAdminT(){
+		List<Booking> booking=airlineService.viewAllBookingsAdminTrue();
+		return booking;
+	}
+	
+	@GetMapping(value = "/viewadminbookingfalse")
+	public List<Booking> viewAllBookingAdminF(){
+		List<Booking> booking=airlineService.viewAllBookingsAdminFalse();
+		return booking;
+	}
 	
 	
 
