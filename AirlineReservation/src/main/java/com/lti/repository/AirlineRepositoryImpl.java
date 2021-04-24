@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,6 +29,8 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 
 	@PersistenceContext
 	EntityManager em;
+	
+	Random random=new Random(1000);
 	
 	@Transactional
 	public Flight addFlights(Flight flight) {
@@ -96,6 +99,14 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 		em.close();
 		return user1;
 	}
+	
+	@Transactional
+	public Admin addAdmin(Admin admin) {
+		Admin admin1 = em.merge(admin);
+		em.close();
+		return admin1;
+	}
+
 
 	@Transactional
 	public User updateAUser(User user) {
@@ -436,4 +447,40 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 		return user.getWallet();
 	}
 
+	
+	@Transactional 
+	  public int generateOtp(String email) {
+	  System.out.println("Email "+email); //generating otp of 4 Digits
+	  
+	  int otp = random.nextInt(999999);
+	  
+	 return otp; 
+	 }
+	  
+	 /* 
+	 * @Transactional public String verifyOtp(String email) { String msg =
+	 * "Successfull!!"; return msg; }
+	 */
+	
+	  @Transactional
+	  public void resetPassword(String email, String password) {
+		  User user = findUserByEmail(email);
+		  user.setPassword(password);
+		  em.merge(user);
+	  }
+	  
+	  public boolean validEmail(String email) {
+			String jpql = "select u from User u where u.email=:uemail";
+			Query query = em.createQuery(jpql);
+			query.setParameter("uemail", email);
+			User user = null;
+			try {
+				user = (User) query.getSingleResult();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if (user == null)
+				return false;
+			return true;
+		}
 }

@@ -89,4 +89,43 @@ public void sendEmailWithTicketAttached(String email,String text1,String subject
 	    }
 
 	}
+
+public boolean sendEmailForForgotPassword(String email,String text,String subject) {
+	SimpleMailMessage message = new SimpleMailMessage();
+	message.setFrom("mananjain3003@outlook.com");
+	message.setTo(email);
+	message.setSubject(subject);
+	message.setText(text);
+	mailSender.send(message);
+	return true;
+}
+public void sendEmailForFeedback(String email,String text,String subject) {
+	SimpleMailMessage message = new SimpleMailMessage();
+	message.setFrom("mananjain3003@outlook.com");
+	message.setTo(email);
+	message.setSubject(subject);
+	message.setText(text);
+	mailSender.send(message);
+
+}
+
+public void sendEmailForNewContactUs(String email,String text,String subject) {
+	SimpleMailMessage message = new SimpleMailMessage();
+	message.setFrom("mananjain3003@outlook.com");
+	message.setTo(email);
+	message.setSubject(subject);
+	message.setText(text);
+	mailSender.send(message);
+
+}
+
+public void sendEmailForRefund(String email,String text,String subject) {
+	SimpleMailMessage message = new SimpleMailMessage();
+	message.setFrom("mananjain3003@outlook.com");
+	message.setTo(email);
+	message.setSubject(subject);
+	message.setText(text);
+	mailSender.send(message);
+
+}
 }

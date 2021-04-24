@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,6 +26,7 @@ import com.lti.dto.Status;
 import com.lti.dto.Status.StatusType;
 import com.lti.dto.TicketDto;
 import com.lti.dto.WalletDto;
+import com.lti.model.Admin;
 import com.lti.model.Booking;
 import com.lti.model.ContactUs;
 import com.lti.model.Feedback;
@@ -32,6 +35,7 @@ import com.lti.model.Passenger;
 import com.lti.model.Ticket;
 import com.lti.model.User;
 import com.lti.service.AirlineService;
+import com.lti.service.EmailService;
 
 @RestController
 @CrossOrigin
@@ -39,6 +43,9 @@ public class AirlineController {
 	
 	@Autowired
 	AirlineService airlineService;
+	
+	@Autowired
+	EmailService emailService;
 	
 	@PostMapping(value = "/registeruser")
 	public User addorUpdateAUser(@RequestBody User user) {
@@ -54,9 +61,14 @@ public class AirlineController {
 	}
 	
 	@PostMapping(value = "/loginadmin")
-	public boolean loginAdmin(@RequestBody AdminDto adminDto) {
+	public boolean loginAdmin(@RequestBody LoginDto loginDto) {
 		
-		return airlineService.loginAdmin(adminDto.getaUserName(),adminDto.getaPassword());
+		return airlineService.loginAdmin(loginDto.getEmail(),loginDto.getPassword());
+	}
+	
+	@PostMapping(value="/addadmin")
+	public Admin addAdmin(@RequestBody Admin admin) {
+		return airlineService.addAdmin(admin);
 	}
 	
 	@PutMapping(value="/updateuser")
@@ -175,6 +187,7 @@ public class AirlineController {
 	public String changeBookStatus(@PathVariable("booking_id") int booking_id) {
 		return airlineService.changeBookingStatus(booking_id);
 	}
+	
 	
 	@PostMapping(value = "/bookandstatus")
 	public List<Booking> bookAndTick(){
@@ -298,9 +311,9 @@ public class AirlineController {
 	
 	@PostMapping("/uploads")
 	public Status upload( MultipartFile file) {
-		String imageUploadLocation = "d:/pics/";
+		String pdfUploadLocation = "d:/pics/";
 		String fileName = file.getOriginalFilename();
-		String targetFile = imageUploadLocation + fileName;
+		String targetFile = pdfUploadLocation + fileName;
 		
 		try {
 			System.out.println("noo"+fileName);
@@ -312,9 +325,6 @@ public class AirlineController {
 			status.setMessage(e.getMessage());
 			return status;
 		}
-
-		
-		
 		
 		Status status = new Status();
 		status.setStatus(StatusType.SUCCESS);
@@ -322,5 +332,31 @@ public class AirlineController {
 		return status;
 	}
 	
+	private String encryptPassword(String password) {
+		return BCrypt.hashpw(password, BCrypt.gensalt());
+	}
+	
+	@GetMapping(value="/send-otp") 
+	 public int generateOtp(@RequestParam("email") String email) { 
+		 
+		 int otp1=airlineService.generateOtp(email);
+		 String subject="OTP sent successfully";
+		 String text="Hi "+email+"! Your OTP for changing password is "+otp1; 
+		 emailService.sendEmailForForgotPassword(email,text,subject);
+	  
+	  return otp1;
+	  
+	  }
+	  
+	 @PutMapping(value="/resetPassword/{email}/{password}")
+	 public void resetPassword(@PathVariable("email") String email, @PathVariable("password") String password) {
+		 airlineService.resetPassword(email, password);
+	 }
+	
+	 @GetMapping(value = "/validEmail")
+		public boolean validEmail(@RequestParam("email") String email) {
+			
+			return airlineService.validEmail(email);
+		}
 
 }

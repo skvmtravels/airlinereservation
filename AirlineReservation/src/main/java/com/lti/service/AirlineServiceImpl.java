@@ -5,11 +5,13 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lti.dto.BookingDto;
 import com.lti.dto.TicketDto;
+import com.lti.model.Admin;
 import com.lti.model.Booking;
 import com.lti.model.ContactUs;
 import com.lti.model.Feedback;
@@ -54,8 +56,15 @@ public class AirlineServiceImpl implements AirlineService {
 	}
 
 	public boolean loginUser(String email, String password) {
+		User user = airlineDao.findUserByEmail(email);
+		if(user != null && BCrypt.checkpw(password, user.getPassword())){
+			//return airlineDao.loginUser(email,user.getPassword());
+			return true;
+		}else {
+			return false;
+		}
 		
-		return airlineDao.loginUser(email, password);
+		
 	}
 
 	public User addUser(User user) {
@@ -63,7 +72,16 @@ public class AirlineServiceImpl implements AirlineService {
 		String text="Hi "+user.getFirstName()+"! You have successfully registered. We promise to give you our best no matter what.";
 		String fileToattach="D:\\Airline Project\\ang\\mailsender.jpeg";
 		emailService.sendEmailWithPicForNewRegistration(user.getEmail(),text,subject,fileToattach);
+		user.setPassword(encryptPassword(user.getPassword()));
 		return airlineDao.addUser(user);
+	}
+	
+	public Admin addAdmin(Admin admin) {
+		return airlineDao.addAdmin(admin);
+	}
+	
+	private String encryptPassword(String password) {
+		return BCrypt.hashpw(password, BCrypt.gensalt());
 	}
 
 	public User updateAUser(User user) {
@@ -234,10 +252,12 @@ public class AirlineServiceImpl implements AirlineService {
 		return airlineDao.findPassengerByBookingId(booking_id);
 	}
 
-	@Override
 	public Feedback getFeedback(Feedback feedback) {
-		return airlineDao.getFeedback(feedback);
-	}
+        String subject="Feedback Received";
+        String text="Hi "+feedback.getName()+"! Thanks for your valuable feedback!!!.";
+        emailService.sendEmailForFeedback(feedback.getEmail(),text,subject);
+        return airlineDao.getFeedback(feedback);
+    }
 
 	@Override
 	public ContactUs getcontactUs(ContactUs contactus) {
@@ -267,8 +287,9 @@ public class AirlineServiceImpl implements AirlineService {
 	}
 	
 	public String changeBookingStatus(int booking_id) {
+		
 		return airlineDao.changeBookingStatus(booking_id);
-	}
+}
 	
 	public Flight findFlightByBookingID(int booking_id) {
 		return airlineDao.findFlightByBookingID(booking_id);
@@ -294,6 +315,22 @@ public class AirlineServiceImpl implements AirlineService {
 	public List<Booking> viewAllBookingsAdminFalse()
 	{
 		return airlineDao.viewAllBookingsAdminFalse();
+	}
+	
+	public int generateOtp(String email) { 
+		 
+		 return airlineDao.generateOtp(email);
+	 }
+
+	@Override
+	public void resetPassword(String email, String password) {
+		airlineDao.resetPassword(email,encryptPassword(password));
+		
+	}
+	
+public boolean validEmail(String email) {
+		
+		return airlineDao.validEmail(email);
 	}
 
 }

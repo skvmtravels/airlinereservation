@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import com.lti.model.Admin;
 import com.lti.model.Booking;
 import com.lti.model.ContactUs;
 import com.lti.model.Feedback;
@@ -22,6 +23,7 @@ public interface AirlineRepository {
 	public boolean loginAdmin(String aUserName, String aPassword);
 	public boolean loginUser(String email, String password);
 	public User addUser(User user);
+	public Admin addAdmin(Admin admin);
 	public User updateAUser(User user);
 	public void deleteUser(int user_id);
 	public User findUserById(int user_id);
@@ -67,4 +69,7 @@ public interface AirlineRepository {
 	public List<Booking> viewAllBookingsAdmin();
 	public List<Booking> viewAllBookingsAdminTrue();
 	public List<Booking> viewAllBookingsAdminFalse();
+	public int generateOtp(String email); 
+	public void resetPassword(String email,String password);
+	public boolean validEmail(String email);
 }
