@@ -1,8 +1,11 @@
 package com.lti.controller;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,13 +13,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.lti.dto.AdminDto;
 import com.lti.dto.BookingDto;
 import com.lti.dto.LoginDto;
-import com.lti.dto.SearchFlightDto;
+import com.lti.dto.Status;
+import com.lti.dto.Status.StatusType;
 import com.lti.dto.TicketDto;
 import com.lti.dto.WalletDto;
 import com.lti.model.Booking;
@@ -290,6 +295,32 @@ public class AirlineController {
 		return booking;
 	}
 	
+	
+	@PostMapping("/uploads")
+	public Status upload( MultipartFile file) {
+		String imageUploadLocation = "d:/pics/";
+		String fileName = file.getOriginalFilename();
+		String targetFile = imageUploadLocation + fileName;
+		
+		try {
+			System.out.println("noo"+fileName);
+			FileCopyUtils.copy(file.getInputStream(), new FileOutputStream(targetFile));
+		} catch (IOException e) {
+			e.printStackTrace();
+			Status status = new Status();
+			status.setStatus(StatusType.FAILURE);
+			status.setMessage(e.getMessage());
+			return status;
+		}
+
+		
+		
+		
+		Status status = new Status();
+		status.setStatus(StatusType.SUCCESS);
+		status.setMessage("Uploaded!");
+		return status;
+	}
 	
 
 }

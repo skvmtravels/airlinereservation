@@ -62,4 +62,31 @@ public class EmailService {
 	    }
 
 	}
+	
+	
+public void sendEmailWithTicketAttached(String email,String text1,String subject,String fileToAttach) {
+		
+		MimeMessagePreparator preparator = new MimeMessagePreparator() {
+			public void prepare(MimeMessage mimeMessage) throws Exception 
+	        {
+	            mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(email));
+	            mimeMessage.setFrom(new InternetAddress("mananjain3003@outlook.com"));
+	            mimeMessage.setSubject(subject);
+	            mimeMessage.setText(text1);
+	             
+	            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+	            	             
+	            FileSystemResource res = new FileSystemResource(new File(fileToAttach));
+	            helper.addAttachment("ticket.pdf", res);
+	        }
+		};
+		try {
+	        jmailSender.send(preparator);
+	    }
+	    catch (MailException ex) {
+	        // simply log it and go on...
+	        System.err.println(ex.getMessage());
+	    }
+
+	}
 }
