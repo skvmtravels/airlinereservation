@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.lti.dto.AdminDto;
 import com.lti.dto.BookingDto;
+import com.lti.dto.EmailTicketDto;
 import com.lti.dto.LoginDto;
 import com.lti.dto.Status;
 import com.lti.dto.Status.StatusType;
@@ -257,6 +258,11 @@ public class AirlineController {
 		return persistFeedback;
 	}
 	
+	@PostMapping(value = "/sendticketmail")
+	public String sendTicketMail(@RequestBody EmailTicketDto emailTicketDto) {
+		return airlineService.sendTicketDetails(emailTicketDto);
+	}
+	
 	@PostMapping(value="/getContactUs")
 	public ContactUs getContactUs(@RequestBody ContactUs contactus) {
 		ContactUs persistContactus = airlineService.getcontactUs(contactus);
@@ -310,9 +316,9 @@ public class AirlineController {
 	
 	
 	@PostMapping("/uploads")
-	public Status upload( MultipartFile file) {
+	public Status upload(@RequestBody MultipartFile file) {
 		String pdfUploadLocation = "d:/pics/";
-		String fileName = file.getOriginalFilename();
+		String fileName = file.getName();
 		String targetFile = pdfUploadLocation + fileName;
 		
 		try {

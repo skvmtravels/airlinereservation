@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lti.dto.BookingDto;
+import com.lti.dto.EmailTicketDto;
 import com.lti.dto.TicketDto;
 import com.lti.model.Admin;
 import com.lti.model.Booking;
@@ -74,6 +75,13 @@ public class AirlineServiceImpl implements AirlineService {
 		emailService.sendEmailWithPicForNewRegistration(user.getEmail(),text,subject,fileToattach);
 		user.setPassword(encryptPassword(user.getPassword()));
 		return airlineDao.addUser(user);
+	}
+	
+	public String sendTicketDetails(EmailTicketDto emailTicketDto) {
+		String subject="Flight Details";
+		String text="Hi! \n Thank you for flying with us."+"\n Booking id: "+emailTicketDto.getBooking_id()+"\n Flight Number: "+emailTicketDto.getFlight_no()+"\n Source: "+emailTicketDto.getFromCity()+"\n Destination: "+emailTicketDto.getToCity();
+		emailService.sendEmailForTicket(emailTicketDto.getEmail(), text, subject);
+		return "Email sent";
 	}
 	
 	public Admin addAdmin(Admin admin) {

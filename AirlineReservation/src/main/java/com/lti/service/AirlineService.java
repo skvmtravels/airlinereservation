@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import com.lti.dto.BookingDto;
+import com.lti.dto.EmailTicketDto;
 import com.lti.dto.TicketDto;
 import com.lti.model.Admin;
 import com.lti.model.Booking;
@@ -72,4 +73,5 @@ public interface AirlineService {
 	public int generateOtp(String email); 
 	public void resetPassword(String email,String password);
 	public boolean validEmail(String email);
+	public String sendTicketDetails(EmailTicketDto emailTicketDto);
 }
