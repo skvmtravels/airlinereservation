@@ -269,7 +269,9 @@ public class AirlineServiceImpl implements AirlineService {
 
 	@Override
 	public ContactUs getcontactUs(ContactUs contactus) {
-		// TODO Auto-generated method stub
+		String subject="Query/Concern Received";
+		String text="Hi "+contactus.getFirstName()+"! We received your email and surely will look into this matter at the earliest. Request you to wait until our team tries to get in touch with you.";
+		emailService.sendEmailForFeedback(contactus.getEmail(),text,subject);
 		return airlineDao.getcontactUs(contactus);
 	}
 	
@@ -339,6 +341,14 @@ public class AirlineServiceImpl implements AirlineService {
 public boolean validEmail(String email) {
 		
 		return airlineDao.validEmail(email);
+	}
+
+	public List<Booking> viewBookingByUserAndTicketTrueAndDateG(int user_id){
+		return airlineDao.viewBookingByUserAndTicketTrueAndDateG(user_id);
+	}
+	
+	public List<Booking> viewBookingByUserAndTicketTrueAndDateS(int user_id){
+		return airlineDao.viewBookingByUserAndTicketTrueAndDateS(user_id);
 	}
 
 }

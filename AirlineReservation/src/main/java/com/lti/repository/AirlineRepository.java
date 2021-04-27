@@ -72,4 +72,6 @@ public interface AirlineRepository {
 	public int generateOtp(String email); 
 	public void resetPassword(String email,String password);
 	public boolean validEmail(String email);
+	public List<Booking> viewBookingByUserAndTicketTrueAndDateG(int user_id);
+	public List<Booking> viewBookingByUserAndTicketTrueAndDateS(int user_id);
 }

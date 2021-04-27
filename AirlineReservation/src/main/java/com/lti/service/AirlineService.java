@@ -74,4 +74,6 @@ public interface AirlineService {
 	public void resetPassword(String email,String password);
 	public boolean validEmail(String email);
 	public String sendTicketDetails(EmailTicketDto emailTicketDto);
+	public List<Booking> viewBookingByUserAndTicketTrueAndDateG(int user_id);
+	public List<Booking> viewBookingByUserAndTicketTrueAndDateS(int user_id);
 }

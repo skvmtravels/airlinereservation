@@ -279,6 +279,25 @@ public class AirlineRepositoryImpl implements AirlineRepository {
 
 	}
 	
+	public List<Booking> viewBookingByUserAndTicketTrueAndDateG(int user_id){
+		String jpql = "select distinct b from Booking b join b.tickets t where t.bookingStatus=1 and b.user.user_id=:uid and trunc(sysdate)<t.travelDate";
+		Query query = em.createQuery(jpql);
+		query.setParameter("uid", user_id);
+		return query.getResultList();
+
+	}
+	
+	public List<Booking> viewBookingByUserAndTicketTrueAndDateS(int user_id){
+		String jpql = "select distinct b from Booking b join b.tickets t where t.bookingStatus=1 and b.user.user_id=:uid and trunc(sysdate)>t.travelDate";
+		Query query = em.createQuery(jpql);
+		query.setParameter("uid", user_id);
+		return query.getResultList();
+
+	}
+	
+	
+	
+	
 	public List<Booking> viewAllBookingsAdmin(){
 		String jpql = "select distinct b from Booking b join b.tickets t";
 		Query query = em.createQuery(jpql);

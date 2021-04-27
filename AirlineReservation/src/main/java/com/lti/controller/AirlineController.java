@@ -184,6 +184,20 @@ public class AirlineController {
 		return bt;
 	}
 	
+	@GetMapping(value = "/bookandticktruedate/{user_id}")
+	public List<Booking> bookAndTickTrueAndDateG(@PathVariable("user_id") int user_id){
+		List<Booking> bt=airlineService.viewBookingByUserAndTicketTrueAndDateG(user_id);
+		
+		return bt;
+	}
+	
+	@GetMapping(value = "/bookandtickfalsedate/{user_id}")
+	public List<Booking> bookAndTickTrueAndDateS(@PathVariable("user_id") int user_id){
+		List<Booking> bt=airlineService.viewBookingByUserAndTicketTrueAndDateS(user_id);
+		
+		return bt;
+	}
+	
 	@PutMapping(value = "/changebookstatus/{booking_id}")
 	public String changeBookStatus(@PathVariable("booking_id") int booking_id) {
 		return airlineService.changeBookingStatus(booking_id);
